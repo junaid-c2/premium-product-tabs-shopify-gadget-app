@@ -1,0 +1,20 @@
+import type { GadgetModel } from "gadget-server";
+
+// This file describes the schema for the "shopifyAppInstallation" model, go to https://premium-product-tabs.gadget.app/edit to view/edit your model in Gadget
+// For more information on how to update this file http://docs.gadget.dev
+
+export const schema: GadgetModel = {
+  type: "gadget/model-schema/v2",
+  storageKey: "DataModel-Shopify-AppInstallation",
+  fields: {},
+  searchIndex: false,
+  shopify: {
+    fields: {
+      accessScopes: { filterIndex: false, searchIndex: false },
+      app: { searchIndex: false },
+      launchUrl: { filterIndex: false, searchIndex: false },
+      shop: { searchIndex: false },
+      uninstallUrl: { filterIndex: false, searchIndex: false },
+    },
+  },
+};

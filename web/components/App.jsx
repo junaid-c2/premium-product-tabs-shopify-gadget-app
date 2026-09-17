@@ -5,7 +5,6 @@ import {
 } from "@gadgetinc/react-shopify-app-bridge";
 import { useEffect } from "react";
 import {
-  Link,
   Outlet,
   Route,
   RouterProvider,
@@ -17,6 +16,7 @@ import {
 import { api } from "../api";
 import { AppBridgeNavigate } from "./AppBridgeNavigate";
 import { IndexPage } from "../routes/index";
+import { TabDetailPage } from "../routes/tabs.$uid";
 import "./App.css";
 
 function Error404() {
@@ -39,6 +39,7 @@ function App() {
     createRoutesFromElements(
       <Route path="/" element={<Layout />}>
         <Route index element={<IndexPage />} />
+        <Route path="tabs/:uid" element={<TabDetailPage />} />
         <Route path="*" element={<Error404 />} />
       </Route>
     )
@@ -65,7 +66,6 @@ function Layout() {
 }
 
 function AuthenticatedApp() {
-  // we use `isAuthenticated` to render pages once the OAuth flow is complete!
   const { isAuthenticated, loading } = useGadget();
   if (loading) {
     return (
@@ -85,20 +85,13 @@ function AuthenticatedApp() {
   return isAuthenticated ? <EmbeddedApp /> : <UnauthenticatedApp />;
 }
 
-/*
-NOTE ABOUT TYPES
-- There is a known issue with Polaris web component types - https://community.shopify.dev/t/missing-app-bridge-type-declarations-for-s-app-nav/26478
-- The `<s-app-nav>` JSX component has broken types when used in React 19 with @shopify/polaris-types v1.0.1
-- The actual component works properly as documented - https://shopify.dev/docs/api/app-home/app-bridge-web-components/app-nav
-*/
-
 function EmbeddedApp() {
   return (
     <>
       <Outlet />
       {/* @ts-expect-error Property 's-app-nav' does not exist on type 'JSX.IntrinsicElements' */}
       <s-app-nav>
-        <s-link href="/">Home</s-link>
+        <s-link href="/">Product Tabs</s-link>
         {/* @ts-expect-error Property 's-app-nav' does not exist on type 'JSX.IntrinsicElements' */}
       </s-app-nav>
     </>

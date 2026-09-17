@@ -12,6 +12,28 @@ export const permissions: GadgetPermissions = {
     "shopify-app-users": {
       storageKey: "Role-Shopify-App",
       models: {
+        shopifyAppInstallation: {
+          read: {
+            filter:
+              "accessControl/filters/shopify/shopifyAppInstallation.gelly",
+          },
+          actions: {
+            create: true,
+            delete: true,
+            update: true,
+          },
+        },
+        shopifyAppSubscription: {
+          read: {
+            filter:
+              "accessControl/filters/shopify/shopifyAppSubscription.gelly",
+          },
+          actions: {
+            create: true,
+            delete: true,
+            update: true,
+          },
+        },
         shopifyGdprRequest: {
           read: {
             filter:
@@ -44,6 +66,30 @@ export const permissions: GadgetPermissions = {
             run: true,
           },
         },
+        tab: {
+          read: {
+            filter: "accessControl/filters/shopify/tab.gelly",
+          },
+          actions: {
+            create: true,
+            delete: true,
+            update: true,
+          },
+        },
+        tabConfigs: {
+          read: {
+            filter: "accessControl/filters/shopify/tabConfigs.gelly",
+          },
+          actions: {
+            create: true,
+            update: true,
+          },
+        },
+      },
+      actions: {
+        ensureShopTabConfigs: true,
+        fetchProductMetafieldDefinitions: true,
+        writeToShopify: true,
       },
     },
     unauthenticated: {

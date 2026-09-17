@@ -6,11 +6,25 @@ import type { GadgetModel } from "gadget-server";
 export const schema: GadgetModel = {
   type: "gadget/model-schema/v2",
   storageKey: "DataModel-Shopify-Shop",
-  fields: {},
+  fields: {
+    chargeId: { type: "string", storageKey: "NDwCmwEbEnWb" },
+    tabConfigs: {
+      type: "hasOne",
+      child: { model: "tabConfigs", belongsToField: "shop" },
+      storageKey: "yyph3A7vUScl",
+    },
+    tabs: {
+      type: "hasMany",
+      children: { model: "tab", belongsToField: "shop" },
+      storageKey: "WRsvfFrfyoEl",
+    },
+  },
   shopify: {
     fields: {
       address1: { filterIndex: false },
       address2: { filterIndex: false },
+      appInstallations: true,
+      appSubscriptions: true,
       checkoutApiSupported: {
         filterIndex: false,
         searchIndex: false,

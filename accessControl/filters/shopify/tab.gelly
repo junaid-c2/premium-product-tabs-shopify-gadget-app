@@ -1,0 +1,3 @@
+filter ($session: Session) on Tab [
+  where shopId == $session.shopId
+]

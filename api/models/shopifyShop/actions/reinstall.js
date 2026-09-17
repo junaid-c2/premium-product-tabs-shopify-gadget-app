@@ -9,8 +9,17 @@ export const run = async ({ params, record, logger, api, connections }) => {
 };
 
 /** @type { ActionOnSuccess } */
-export const onSuccess = async ({ params, record, logger, api, connections }) => {
-  // Your logic goes here
+export const onSuccess = async ({ record, api }) => {
+  await api.enqueue(api.ensureShopTabConfigs, { shopId: record.id });
+  await api.enqueue(api.syncStorefrontTabsMetafield, { shopId: record.id });
+
+  await api.shopifySync.run({
+    domain: record.domain,
+    shop: {
+      _link: record?.id,
+    },
+    models: ["shopifyAppSubscription", "shopifyApp", "shopifyAppInstallation"]
+  });
 };
 
 /** @type { ActionOptions } */

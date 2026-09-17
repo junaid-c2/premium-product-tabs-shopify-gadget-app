@@ -1,1 +1,510 @@
-/** put your app's css here */
+.tabs-list__table-wrap {
+  position: relative;
+}
+
+.tabs-list__table-wrap--reordering {
+  outline: 2px dashed var(--p-color-border-emphasis, rgba(0, 0, 0, 0.25));
+  outline-offset: 2px;
+  border-radius: var(--p-border-radius-200, 8px);
+}
+
+.tabs-list__row {
+  transition:
+    background-color 0.15s ease,
+    box-shadow 0.15s ease,
+    opacity 0.15s ease;
+}
+
+.tabs-list__row--reorder-active:not(.tabs-list__row--dragging) {
+  opacity: 0.92;
+}
+
+.tabs-list__row--dragging {
+  position: relative;
+  z-index: 2;
+  opacity: 1;
+  background: var(--p-color-bg-surface, #fff);
+  box-shadow:
+    0 0 0 2px var(--p-color-border-emphasis, #005bd3),
+    0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.tabs-list__row--drop-hover {
+  position: relative;
+}
+
+.tabs-list__row--drop-hover::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 3px;
+  background: var(--p-color-border-emphasis, #005bd3);
+  border-radius: 2px;
+  pointer-events: none;
+  animation: tabs-list-drop-line 0.6s ease-in-out infinite alternate;
+}
+
+@keyframes tabs-list-drop-line {
+  from {
+    opacity: 0.55;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.tabs-list__drag-handle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--p-space-150, 6px);
+  padding: var(--p-space-150, 6px) var(--p-space-200, 8px);
+  margin: calc(-1 * var(--p-space-100));
+  border: 1px solid var(--p-color-border-secondary, rgba(0, 0, 0, 0.12));
+  background: var(--p-color-bg-surface-secondary, rgba(0, 0, 0, 0.04));
+  cursor: grab;
+  border-radius: var(--p-border-radius-200, 8px);
+  color: var(--p-color-text, inherit);
+  touch-action: none;
+}
+
+.tabs-list__drag-handle:hover {
+  background: var(--p-color-bg-surface-hover, rgba(0, 0, 0, 0.06));
+  border-color: var(--p-color-border-emphasis, rgba(0, 0, 0, 0.2));
+}
+
+.tabs-list__drag-handle:focus-visible {
+  outline: 2px solid var(--p-color-border-focus, #005bd3);
+  outline-offset: 2px;
+}
+
+.tabs-list__drag-handle--active {
+  cursor: grabbing;
+  background: var(--p-color-bg-surface-selected, rgba(0, 91, 211, 0.08));
+  border-color: var(--p-color-border-emphasis, #005bd3);
+}
+
+.tabs-list__drag-handle:active {
+  cursor: grabbing;
+}
+
+.tabs-list__order-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.25rem;
+  height: 1.25rem;
+  padding: 0 var(--p-space-100, 4px);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  border-radius: var(--p-border-radius-100, 4px);
+  background: var(--p-color-bg-fill-secondary, rgba(0, 0, 0, 0.06));
+  color: var(--p-color-text-secondary, rgba(0, 0, 0, 0.65));
+}
+
+.tabs-list__drag-handle--active .tabs-list__order-badge {
+  background: var(--p-color-bg-fill-emphasis, #005bd3);
+  color: var(--p-color-text-on-emphasis, #fff);
+}
+
+.tabs-list-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--p-space-400);
+  align-items: start;
+}
+
+@media (min-width: 900px) {
+  .tabs-list-layout {
+    grid-template-columns: minmax(0, 1fr) minmax(280px, 1fr);
+  }
+}
+
+.tabs-list__row--selected:not(.tabs-list__row--dragging) {
+  background: var(--p-color-bg-surface-selected, rgba(0, 0, 0, 0.04));
+}
+
+/* —— Storefront preview (index page) —— */
+.storefront-preview-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.storefront-preview-wrap--empty {
+  padding: 1.25rem;
+  border: 1px dashed #c9cccf;
+  border-radius: 12px;
+  background: #fafbfb;
+}
+
+.storefront-preview-wrap__heading {
+  margin: 0;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: #202223;
+  letter-spacing: -0.01em;
+}
+
+.storefront-preview-wrap__caption {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: #6d7175;
+}
+
+.storefront-preview__no-tabs {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: #6d7175;
+  padding: 0.75rem;
+  background: #f6f6f7;
+  border-radius: 8px;
+}
+
+.storefront-preview__frame {
+  overflow: hidden;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.05), 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.storefront-preview__frame--underline,
+.storefront-preview__frame--filled,
+.storefront-preview__frame--accordions {
+  box-sizing: border-box;
+}
+
+.storefront-preview__tab-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--ppt-tabs-header-gap, 4px);
+  margin: 0;
+  /* padding: 0 0.75rem; */ /* AI: Don't Uncomment this */
+}
+
+.storefront-preview__tab-bar .storefront-preview__tab {
+  width: auto;
+  flex: 0 0 auto;
+}
+
+.storefront-preview__tab,
+.storefront-preview__accordion-trigger {
+  margin: 0;
+  padding: 0.625rem 0.875rem;
+  box-sizing: border-box;
+  cursor: pointer;
+  text-align: left;
+  font-family: var(--ppt-header-font-family, inherit);
+  font-size: var(--ppt-header-font-size, 14px);
+  font-style: var(--ppt-header-font-style, normal);
+  font-weight: var(--ppt-header-font-weight, 400);
+  color: var(--ppt-tab-text, #6d7175);
+  background-color: var(--ppt-tab-bg, transparent);
+  border-radius: var(--ppt-tab-radius, 0);
+  transition:
+    color 0.15s ease,
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.storefront-preview__accordion-trigger {
+  width: 100%;
+}
+
+.storefront-preview__tab:hover,
+.storefront-preview__accordion-trigger:hover {
+  color: var(--ppt-tab-hover-text, #202223);
+  background-color: var(--ppt-tab-hover-bg, transparent);
+  border-color: var(--ppt-tab-hover-border, transparent);
+}
+
+.storefront-preview__frame--underline .storefront-preview__tab-bar {
+  border-bottom: 1px solid var(--ppt-tab-bar-divider, #e1e3e5);
+}
+
+.storefront-preview__frame--underline .storefront-preview__tab {
+  border: none;
+  border-radius: var(--ppt-tab-radius, 0);
+  background-clip: padding-box;
+  box-shadow: inset 0 calc(-1 * var(--ppt-tab-underline-width, 2px)) 0 0 transparent;
+}
+
+.storefront-preview__frame--underline .storefront-preview__tab:hover {
+  box-shadow: inset 0 calc(-1 * var(--ppt-tab-underline-width, 2px)) 0 0
+    var(--ppt-tab-hover-border, transparent);
+}
+
+.storefront-preview__frame--underline .storefront-preview__tab--active {
+  color: var(--ppt-tab-active-text, #202223);
+  background-color: var(--ppt-tab-active-bg, transparent);
+  box-shadow: inset 0 calc(-1 * var(--ppt-tab-underline-width, 2px)) 0 0
+    var(--ppt-tab-active-border, #202223);
+}
+
+.storefront-preview__frame--filled .storefront-preview__tab-bar {
+  /* padding: 0.5rem 0.75rem; */ /* AI: Don't Uncomment this */
+  border-bottom: none;
+}
+
+.storefront-preview__frame--filled .storefront-preview__tab {
+  border: var(--ppt-tabs-header-border-width, 1px) solid var(--ppt-tabs-header-border, transparent);
+  border-radius: var(--ppt-tabs-header-border-radius, 0);
+}
+
+.storefront-preview__frame--filled .storefront-preview__tab--active {
+  color: var(--ppt-tab-active-text, #202223);
+  background-color: var(--ppt-tab-active-bg, transparent);
+  border-color: var(--ppt-tab-active-border, #202223);
+}
+
+.storefront-preview__frame--accordions .storefront-preview__accordion-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  border: var(--ppt-accordions-header-border-width, 1px) solid
+    var(--ppt-accordions-header-border, #e1e3e5);
+  border-radius: var(--ppt-accordions-header-border-radius, 8px);
+}
+
+.storefront-preview__accordion-trigger-label {
+  flex: 1;
+  min-width: 0;
+  text-align: left;
+}
+
+.storefront-preview__accordion-trigger-icon {
+  flex-shrink: 0;
+  opacity: 0.72;
+}
+
+.storefront-preview__frame--accordions
+  .storefront-preview__accordion-item--open
+  .storefront-preview__accordion-trigger {
+  color: var(--ppt-tab-active-text, #202223);
+  background-color: var(--ppt-tab-active-bg, #f6f6f7);
+  border-color: var(--ppt-tab-active-border, #e1e3e5);
+}
+
+.storefront-preview__accordion {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ppt-accordions-item-gap, 8px);
+  padding: 0;
+}
+
+.storefront-preview__accordion-panel {
+  margin-top: var(--ppt-accordions-header-body-gap, 12px);
+  padding: var(--ppt-accordions-body-padding, 12px);
+  border: none;
+  border-radius: 0;
+  background: transparent;
+}
+
+.storefront-preview__tab:focus-visible {
+  outline: 2px solid #005bd3;
+  outline-offset: 2px;
+}
+
+.storefront-preview__panel {
+  margin-top: var(--ppt-tabs-header-body-gap, 12px);
+  padding: var(--ppt-tabs-body-padding, 12px);
+  min-height: 4.5rem;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+}
+
+.storefront-preview__notice {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-bottom: 0.75rem;
+  padding: 0.625rem 0.75rem;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  border-radius: 8px;
+}
+
+.storefront-preview__notice--hidden {
+  background: #fff5ea;
+  border: 1px solid #e1b878;
+  color: #5c4813;
+}
+
+.storefront-preview__notice--hidden strong {
+  font-weight: 600;
+}
+
+.storefront-preview__content {
+  margin: 0;
+  font-family: var(--ppt-body-font-family, inherit);
+  font-size: var(--ppt-body-font-size, 14px);
+  font-style: var(--ppt-body-font-style, normal);
+  font-weight: var(--ppt-body-font-weight, 400);
+  line-height: 1.55;
+  color: #202223;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.storefront-preview__content--html p {
+  margin: 0 0 0.75em;
+}
+
+.storefront-preview__content--html p:last-child {
+  margin-bottom: 0;
+}
+
+.storefront-preview__meta {
+  padding-top: 0.25rem;
+  border-top: 1px solid #e1e3e5;
+}
+
+.index-page__view-toggle {
+  display: flex;
+  gap: 0;
+  padding: 0.25rem;
+  margin-bottom: 0.75rem;
+  background: #f6f6f7;
+  border-radius: 10px;
+  width: fit-content;
+}
+
+.index-page__view-toggle-btn {
+  margin: 0;
+  padding: 0.5rem 1rem;
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #6d7175;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.index-page__view-toggle-btn--active {
+  color: #202223;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+.index-page__view-toggle-btn:focus-visible {
+  outline: 2px solid #005bd3;
+  outline-offset: 2px;
+}
+
+.index-page__settings-panel {
+  /* padding: 0.75rem 1rem 1.25rem; */
+  max-width: 720px;
+}
+
+.index-page__info-banner-list {
+  margin: 0;
+  padding-left: 1.25rem;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--p-color-text-secondary, #616161);
+}
+
+.index-page__info-banner-list li + li {
+  margin-top: 0.375rem;
+}
+
+.index-page__info-banner-list strong {
+  font-weight: 600;
+  color: inherit;
+}
+
+.tab-global-settings__section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.tab-global-settings__section-title {
+  margin: 0;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: #202223;
+  letter-spacing: -0.01em;
+}
+
+/* —— Tab rich text editor (Polaris toolbar + HTML body) —— */
+.tab-rich-text-editor {
+  display: flex;
+  flex-direction: column;
+}
+
+.tab-rich-text-editor__toolbar {
+  padding: 0.375rem 0.5rem;
+  border-bottom: 1px solid #e1e3e5;
+  background: #f6f6f7;
+}
+
+.tab-rich-text-editor__toolbar-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.tab-rich-text-editor__code {
+  padding: 0.5rem 0.75rem 0.75rem;
+}
+
+.tab-rich-text-editor__code s-text-area {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.8125rem;
+}
+
+.tab-rich-text-editor__surface {
+  min-height: 10rem;
+  max-height: 20rem;
+  overflow-y: auto;
+  padding: 0.75rem;
+  font-size: 0.875rem;
+  line-height: 1.55;
+  color: #202223;
+  outline: none;
+}
+
+.tab-rich-text-editor__surface--disabled {
+  background: #fafbfb;
+  color: #6d7175;
+  cursor: not-allowed;
+}
+
+.tab-rich-text-editor__surface:empty::before {
+  content: attr(data-placeholder);
+  color: #8c9196;
+  pointer-events: none;
+}
+
+.tab-rich-text-editor__surface ul,
+.tab-rich-text-editor__surface ol {
+  margin: 0.5em 0;
+  padding-left: 1.25rem;
+}
+
+.tab-rich-text-editor__surface p {
+  margin: 0 0 0.75em;
+}
+
+.tab-rich-text-editor__surface p:last-child {
+  margin-bottom: 0;
+}
+
+.tab-rich-text-editor__surface a {
+  color: #005bd3;
+  text-decoration: underline;
+}

@@ -20,7 +20,6 @@
     "@gadgetinc/react": "^0.25.1",
     "@gadgetinc/react-shopify-app-bridge": "^0.21.4",
     "@shopify/app-bridge-react": "4.2.3",
-    "@shopify/polaris-icons": "^9.3.0",
     "gadget-server": "link:.gadget/server",
     "react": "^19.1.2",
     "react-dom": "^19.1.2",

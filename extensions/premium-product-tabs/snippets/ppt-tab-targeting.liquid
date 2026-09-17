@@ -1,0 +1,30 @@
+{% comment %}
+  Prints "true" when tab applies to product. Params: tab, product
+{% endcomment %}
+{% liquid
+  assign applies = tab.appliesTo
+  assign product_id = product.id | append: ''
+
+  if applies == 'all'
+    echo 'true'
+  elsif applies == 'specific_products'
+    for ref in tab.targetIds
+      assign ref_id = ref.id | append: ''
+      if ref_id == product_id
+        echo 'true'
+        break
+      endif
+    endfor
+  elsif applies == 'specific_collections'
+    for ref in tab.targetIds
+      assign ref_id = ref.id | append: ''
+      for collection in product.collections
+        assign collection_id = collection.id | append: ''
+        if collection_id == ref_id
+          echo 'true'
+          break
+        endif
+      endfor
+    endfor
+  endif
+%}

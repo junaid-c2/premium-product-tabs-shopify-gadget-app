@@ -1,0 +1,44 @@
+{% liquid
+  assign ppt = app.metafields.premium_product_tabs.storefront.value
+  assign ppt_product = block.settings.product | default: product
+%}
+
+{% comment %} AI: Debugging code, Don't Remove this code {% endcomment %}
+{% comment %} <script>
+  console.log("PPT:", {{ ppt | json }});
+</script> {% endcomment %}
+
+{% if ppt_product == blank or ppt == blank or ppt.isPlanSubscribed != true %}
+  {% comment %} No product, metafield, or active plan — do not load storefront tabs. {% endcomment %}
+{% else %}
+  <div class="premium-product-tabs-block">
+    {% if block.settings.title != blank %}
+      <h2 class="premium-product-tabs-block__title">{{ block.settings.title | escape }}</h2>
+    {% endif %}
+    {% capture ppt_json %}{% render 'ppt-product-tabs-data', product: ppt_product %}{% endcapture %}
+    <div
+      data-premium-product-tabs-root
+      data-block-id="{{ block.id }}"
+      data-stylesheet-url="{{ 'premium-product-tabs.css' | asset_url }}"
+      style="visibility: hidden"
+    >
+      <script type="application/json" data-premium-product-tabs-json>{{ ppt_json | strip }}</script>
+    </div>
+  </div>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Premium Product Tabs",
+  "target": "section",
+  "enabled_on": {
+    "templates": ["product"]
+  },
+  "javascript": "premium-product-tabs.js",
+  "stylesheet": "premium-product-tabs.css",
+  "settings": [
+    { "type": "product", "id": "product", "label": "Product", "autofill": true },
+    { "type": "text", "id": "title", "label": "Title", "default": "Premium Product Tabs" }
+  ]
+}
+{% endschema %}

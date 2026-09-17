@@ -400,11 +400,6 @@
   dependencies:
     "@standard-schema/spec" "^1.0.0"
 
-"@shopify/polaris-icons@^9.3.0":
-  version "9.3.1"
-  resolved "https://registry.yarnpkg.com/@shopify/polaris-icons/-/polaris-icons-9.3.1.tgz#945aff6632c70a8086ca62d99c2e68257ea59e5a"
-  integrity sha512-16BIFAT93LJ8X4YRXz5cR9ZPHeErMg3DYS0gyTPNPkd0E5IBPoTxPINjn2b4Mr9Sc1x4RfI4AqPcV8ut0D1J5w==
-
 "@shopify/polaris-types@1.0.1":
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@shopify/polaris-types/-/polaris-types-1.0.1.tgz#8df6a07a36ca26cdeef0f37eab8a6f0e2d5e7078"

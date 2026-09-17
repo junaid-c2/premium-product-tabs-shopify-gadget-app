@@ -1,0 +1,54 @@
+{% comment %}
+  Resolves one tab's HTML/text body. Params: tab, product
+{% endcomment %}
+{% liquid
+  assign ctype = tab.contentType | upcase
+
+  if ctype == 'STATIC'
+    echo tab.content.staticContent
+  else
+    assign ds = tab.content.dataSource | default: ''
+    assign raw_value = ''
+
+    case ds
+      when 'description'
+        assign raw_value = product.description
+      when 'vendor'
+        assign raw_value = product.vendor
+      when 'product_type'
+        assign raw_value = product.type
+      when 'tags'
+        assign raw_value = product.tags | join: ', '
+      when 'sku'
+        assign raw_value = product.selected_or_first_available_variant.sku
+    endcase
+
+    if ds contains 'metafield:'
+      assign mf_path = ds | split: 'metafield:' | last
+      assign mf_parts = mf_path | split: '.'
+      assign mf_ns = mf_parts | first
+      assign mf_key = mf_parts | last
+      assign mf = product.metafields[mf_ns][mf_key]
+      if mf != blank
+        capture raw_value
+          echo mf | metafield_tag
+        endcapture
+        assign raw_value = raw_value | strip
+        if raw_value == blank
+          assign raw_value = mf | metafield_text | default: mf.value
+        endif
+      endif
+    endif
+
+    assign raw_value = raw_value | strip
+
+    if raw_value == blank
+      if tab.content.emptyBehavior == 'fallback'
+        echo tab.content.fallbackText
+      endif
+    else
+      assign tpl = tab.content.template | default: '{{value}}'
+      echo tpl | replace: '{{value}}', raw_value
+    endif
+  endif
+%}

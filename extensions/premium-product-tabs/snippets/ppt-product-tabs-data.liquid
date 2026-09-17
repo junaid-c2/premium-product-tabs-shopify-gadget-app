@@ -1,0 +1,103 @@
+{% comment %}
+  Outputs JSON: { tabConfigs, tabs[], isPlanSubscribed }. No nested {% render %} — avoids HTML comments in JSON.
+  Params: product
+{% endcomment %}
+{% liquid
+  assign ppt = app.metafields.premium_product_tabs.storefront.value
+  assign sorted_tabs = ppt.tabs | sort: 'position'
+  assign ppt_product_id = product.id | append: ''
+%}
+
+{% if ppt == blank or ppt.isPlanSubscribed != true or sorted_tabs == blank %}
+{"tabConfigs":{},"tabs":[],"isPlanSubscribed":false}
+{% else %}
+{"tabConfigs":{{ ppt.tabConfigs | json }},"isPlanSubscribed":true,"tabs":[
+{% assign ppt_first = true %}
+{% for tab in sorted_tabs %}
+  {% liquid
+    assign ppt_show = false
+    assign applies = tab.appliesTo
+
+    if applies == 'all'
+      assign ppt_show = true
+    elsif applies == 'specific_products'
+      for ref in tab.targetIds
+        assign ref_id = ref.id | append: ''
+        if ref_id == ppt_product_id
+          assign ppt_show = true
+          break
+        endif
+      endfor
+    elsif applies == 'specific_collections'
+      for ref in tab.targetIds
+        assign ref_id = ref.id | append: ''
+        for collection in product.collections
+          assign collection_id = collection.id | append: ''
+          if collection_id == ref_id
+            assign ppt_show = true
+            break
+          endif
+        endfor
+      endfor
+    endif
+  %}
+
+  {% if ppt_show %}
+    {% capture ppt_body %}
+      {% liquid
+        assign ctype = tab.contentType | upcase
+        if ctype == 'STATIC'
+          echo tab.content.staticContent
+        else
+          assign ds = tab.content.dataSource | default: ''
+          assign raw_value = ''
+          case ds
+            when 'description'
+              assign raw_value = product.description
+            when 'vendor'
+              assign raw_value = product.vendor
+            when 'product_type'
+              assign raw_value = product.type
+            when 'tags'
+              assign raw_value = product.tags | join: ', '
+            when 'sku'
+              assign raw_value = product.selected_or_first_available_variant.sku
+          endcase
+          if ds contains 'metafield:'
+            assign mf_path = ds | split: 'metafield:' | last
+            assign mf_parts = mf_path | split: '.'
+            assign mf_ns = mf_parts | first
+            assign mf_key = mf_parts | last
+            assign mf = product.metafields[mf_ns][mf_key]
+            if mf != blank
+              capture raw_value
+                echo mf | metafield_tag
+              endcapture
+              assign raw_value = raw_value | strip
+              if raw_value == blank
+                assign raw_value = mf | metafield_text | default: mf.value
+              endif
+            endif
+          endif
+          assign raw_value = raw_value | strip
+          if raw_value == blank
+            if tab.content.emptyBehavior == 'fallback'
+              echo tab.content.fallbackText
+            endif
+          else
+            assign tpl = tab.content.template | default: '{{value}}'
+            echo tpl | replace: '{{value}}', raw_value
+          endif
+        endif
+      %}
+    {% endcapture %}
+    {% assign ppt_body = ppt_body | strip %}
+    {% if ppt_body != blank %}
+      {% unless ppt_first %},{% endunless %}
+      {% assign ppt_first = false %}
+{"uid":{{ tab.uid | json }},"title":{{ tab.title | json }},"bodyHtml":{{ ppt_body | json }}}
+    {% endif %}
+  {% endif %}
+{% endfor %}
+]}
+{% endif %}
